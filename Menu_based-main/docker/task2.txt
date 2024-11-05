@@ -1,0 +1,26 @@
+// Run GUI Programs in Docker: Execute graphical applications in a Docker container
+
+mkdir dockerGui
+cd dockerGui
+vim Dockerfile
+
+# Base image with X11 support
+FROM ubuntu:20.04
+
+# Prevent dialog prompts
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install required packages
+RUN apt-get update && apt-get install -y firefox
+
+# Define display variable
+ENV DISPLAY=:0
+
+# Run Firefox
+CMD ["firefox"]
+
+save & close
+
+docker build -t firefox-container .
+
+docker run -it --rm --net=host --env="DISPLAY" --volume="$HOME/.Xauthority:/root/.Xauthority:rw" firefox-container

@@ -1,0 +1,175 @@
+project_folder/
+│
+├── app.py
+├── marks_model (your pre-trained model)
+├── templates/
+│   ├── index.html
+│   └── result.html
+└── static/
+    └── (any static files like CSS/JS if needed)
+
+
+app.py
+
+from flask import Flask, render_template, request
+import joblib
+
+app = Flask(__name__)
+
+# Load your pre-trained model
+model = joblib.load("marks_model")
+
+@app.route('/')
+def home():
+    return render_template('index.html')
+
+@app.route('/predict', methods=['POST'])
+def predict():
+    if request.method == 'POST':
+        try:
+            # Get hours input from the form
+            hrs = int(request.form['hours'])
+
+            # Predict the marks
+            prediction = model.predict([[hrs]])
+
+            # Render the result on a new page
+            return render_template('results.html', prediction=prediction[0])
+        except ValueError:
+            return "Please enter a valid number of hours."
+
+if __name__ == "__main__":
+    app.run(debug=True, host='0.0.0.0', port=5000)
+
+templates/index.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predict Your Marks</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #007bff;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .error {
+            color: red;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Predict Your Marks</h1>
+        <form action="http://192.168.1.6:5000/predict" method="POST">
+            <label for="hours">Enter your study hours:</label>
+            <input type="number" name="hours" id="hours" placeholder="Enter hours..." required>
+            <button type="submit">Predict Marks</button>
+        </form>
+    </div>
+
+</body>
+</html>
+
+templates/results.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #007bff;
+        }
+
+        .prediction {
+            text-align: center;
+            font-size: 24px;
+            margin-top: 20px;
+        }
+
+        .home-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .home-link a {
+            text-decoration: none;
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Prediction Result</h1>
+        <p class="prediction">Your predicted marks: {{ prediction }}</p>
+        <div class="home-link">
+            <a href="/">Predict Again</a>
+        </div>
+    </div>
+
+</body>
+</html>

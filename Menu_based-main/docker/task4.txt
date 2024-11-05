@@ -1,0 +1,41 @@
+Docker-in-Docker: Run Docker inside a Docker container using a CentOS image.
+
+docker pull quay.io/centos/centos:stream9
+
+mkdir mydocker
+
+cd mydocker
+
+vim DockerFile
+
+# Use CentOS as the base image
+FROM quay.io/centos/centos:stream9
+
+# Install required packages for Docker
+RUN yum install -y yum-utils \
+    device-mapper-persistent-data \
+    lvm2
+
+# Add Docker repository
+RUN yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+# Install Docker
+RUN yum install -y docker-ce docker-ce-cli containerd.io
+
+# Start Docker service
+RUN systemctl enable docker
+
+# Expose Docker socket
+VOLUME /var/lib/docker
+EXPOSE 2375
+
+# Start Docker daemon
+CMD ["dockerd", "-H", "unix:///var/run/docker.sock"]
+
+save & close
+
+sudo docker build -t centos-dind .
+
+docker run --privileged --name my-dind-centos1 -d centos-dind
+
+docker exec -it my-dind-centos1 sh

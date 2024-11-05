@@ -1,0 +1,11 @@
+Run Python in Docker: Containerize and run a Python script.
+
+
+yum install docker-ce
+docker pull redhat/ubi8
+docker run -it -name mypyos1 redhat/ubi8
+yum install python3
+
+vim menu.py
+print("hello world!!!")
+python3 menu.py

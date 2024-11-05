@@ -1,0 +1,32 @@
+Live Camera Stream: Stream camera feed live on a webpage.
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <video id="myVideo" autoplay>
+    </video>
+    
+    <script>
+    async function startCamera() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+    const video = document.getElementById('myVideo');
+    video.srcObject = stream;
+  } catch (error) {
+    console.error('Error accessing camera:', error);
+  }
+}
+
+startCamera();        
+    </script>
+</body>
+</html>
+
+
+

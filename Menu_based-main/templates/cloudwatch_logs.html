@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retrieve CloudWatch Logs</title>
+</head>
+<body>
+    <h1>Retrieve CloudWatch Logs</h1>
+    <form action="/get_logs" method="POST">
+        <label for="access_key">AWS Access Key ID:</label>
+        <input type="text" id="access_key" name="access_key" required><br>
+
+        <label for="secret_key">AWS Secret Access Key:</label>
+        <input type="password" id="secret_key" name="secret_key" required><br>
+
+        <label for="region">Region:</label>
+        <input type="text" id="region" name="region" value="ap-south-1" required><br>
+
+        <label for="log_group">Log Group Name:</label>
+        <input type="text" id="log_group" name="log_group" required><br>
+
+        <label for="log_stream">Log Stream Name:</label>
+        <input type="text" id="log_stream" name="log_stream" required><br>
+
+        <input type="submit" value="Retrieve Logs">
+    </form>
+</body>
+</html>

@@ -1,0 +1,22 @@
+Web Server in Docker: Set up and run a web server inside a Docker container
+
+mkdir webserver
+cd webserver
+vim index.html
+This is Faizan webserver
+save & close
+
+vim Dockerfile
+
+FROM httpd:latest
+COPY . /usr/local/apache2/htdocs/
+EXPOSE 80
+CMD ["httpd-foreground"]
+
+save & close
+
+docker build -t faizan_web:v1 .
+
+docker run -d -p 8080:80 --name webos1 faizan_web:v1
+
+then go on firefox and type http://localhost:8080/

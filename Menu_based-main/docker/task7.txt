@@ -1,0 +1,6 @@
+External Web Server Access: Access a Docker container's web server from a host Windows system
+
+docker run -d -p 8080:80 --name webos1 faizan_web:v1
+
+in this -p 8080:80 is important to launch this to windows host
+

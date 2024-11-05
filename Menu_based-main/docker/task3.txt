@@ -1,0 +1,43 @@
+Machine Learning Model in Docker: Deploy and run an ML model in a Docker container
+
+docker run -it --name mlos redhat/ubi8
+
+yum install python3
+yum install pandas
+pip install pandas
+pip3 install pandas
+vi marks.txt
+hrs,marks
+4,40
+7,70
+2,20
+5,50
+3,30
+
+vi ml.py
+
+import pandas
+db = pandas.read_csv("marks.txt")
+y = db["marks"]
+x = db["hrs"]
+x = x.values.reshape(-1,1)
+from sklearn.linear_model import LinearRegression
+model = LinearRegression()
+model.fit(x,y)
+import joblib
+joblib.dump(model,"marks_model")
+
+python3 ml.py
+pip3 install sklearn
+pip3 install scikit-learn
+python3 ml.py
+ls
+
+vi my_ml_model.py
+
+import joblib
+mymodel = joblib.load("marks_model")
+hrs = int(input("Enter u r Hrs:"))
+p= mymodel.predict([[hrs]])
+print("Your future Marks will be:",p)
+python3 my_ml_model.py

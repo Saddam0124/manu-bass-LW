@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start Transcription Job</title>
+</head>
+<body>
+    <h1>Start Transcription Job</h1>
+    <form action="/start_transcription" method="POST">
+        <label for="access_key">AWS Access Key ID:</label>
+        <input type="text" id="access_key" name="access_key" required><br>
+
+        <label for="secret_key">AWS Secret Access Key:</label>
+        <input type="password" id="secret_key" name="secret_key" required><br>
+
+        <label for="region">Region:</label>
+        <input type="text" id="region" name="region" value="ap-south-1" required><br>
+
+        <label for="bucket_name">S3 Bucket Name:</label>
+        <input type="text" id="bucket_name" name="bucket_name" required><br>
+
+        <label for="file_key">S3 File Key (e.g., audio.mp3):</label>
+        <input type="text" id="file_key" name="file_key" required><br>
+
+        <input type="submit" value="Start Transcription">
+    </form>
+</body>
+</html>

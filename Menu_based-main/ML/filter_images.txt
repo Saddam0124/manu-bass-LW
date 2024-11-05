@@ -1,0 +1,166 @@
+pip install Flask Pillow
+
+project_folder/
+│
+├── app.py
+├── templates/
+│   ├── index.html
+
+
+app.py
+
+from flask import Flask, render_template, request, send_file
+from PIL import Image, ImageFilter, ImageOps
+import io
+
+app = Flask(__name__)
+
+# Apply filter function
+def apply_filter(image, filter_name):
+    if filter_name == "BLUR":
+        return image.filter(ImageFilter.BLUR)
+    elif filter_name == "CONTOUR":
+        return image.filter(ImageFilter.CONTOUR)
+    elif filter_name == "DETAIL":
+        return image.filter(ImageFilter.DETAIL)
+    elif filter_name == "EDGE_ENHANCE":
+        return image.filter(ImageFilter.EDGE_ENHANCE)
+    elif filter_name == "SHARPEN":
+        return image.filter(ImageFilter.SHARPEN)
+    elif filter_name == "GRAYSCALE":
+        return ImageOps.grayscale(image)
+    elif filter_name == "INVERT":
+        return ImageOps.invert(image)
+    else:
+        return image
+
+# Route to the index page
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+# Route to upload and process image
+@app.route('/upload', methods=['POST'])
+def upload_image():
+    if 'image' not in request.files:
+        return "No file uploaded", 400
+
+    file = request.files['image']
+    filter_name = request.form['filter']
+    
+    if file:
+        image = Image.open(file.stream)
+        
+        # Apply the selected filter
+        filtered_image = apply_filter(image, filter_name)
+        
+        # Save filtered image in memory
+        img_io = io.BytesIO()
+        filtered_image.save(img_io, 'JPEG')
+        img_io.seek(0)
+        
+        # Return the processed image
+        return send_file(img_io, mimetype='image/jpeg')
+
+if __name__ == "__main__":
+    app.run(debug=True, host="0.0.0.0", port=5500)
+
+
+templates/index.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Filter WebApp</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding-top: 50px;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            margin: auto;
+        }
+        h2 {
+            margin-bottom: 20px;
+        }
+        input[type="file"], select, button {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            width: 100%;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        #output {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Apply Filters to Your Image</h2>
+        <form id="imageForm" enctype="multipart/form-data">
+            <input type="file" name="image" id="imageInput" accept="image/*" required><br>
+            <select name="filter" id="filterSelect" required>
+                <option value="BLUR">Blur</option>
+                <option value="CONTOUR">Contour</option>
+                <option value="DETAIL">Detail</option>
+                <option value="EDGE_ENHANCE">Edge Enhance</option>
+                <option value="SHARPEN">Sharpen</option>
+                <option value="GRAYSCALE">Grayscale</option>
+                <option value="INVERT">Invert</option>
+            </select><br>
+            <button type="submit">Apply Filter</button>
+        </form>
+
+        <div id="output">
+            <h3>Filtered Image</h3>
+            <img id="outputImage" src="" alt="Filtered Image" style="max-width: 100%; display: none;">
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('imageForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            var formData = new FormData();
+            var fileField = document.querySelector('input[type="file"]');
+            var filterField = document.getElementById('filterSelect').value;
+
+            formData.append('image', fileField.files[0]);
+            formData.append('filter', filterField);
+
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.blob())
+            .then(blob => {
+                var url = URL.createObjectURL(blob);
+                var outputImage = document.getElementById('outputImage');
+                outputImage.src = url;
+                outputImage.style.display = 'block';
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+
+</body>
+</html>

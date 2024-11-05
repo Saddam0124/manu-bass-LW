@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Launch EC2 Instance</title>
+</head>
+<body>
+    <h1>Launch EC2 Instance</h1>
+    <form action="/launch_instance" method="POST">
+        <label for="access_key">AWS Access Key ID:</label>
+        <input type="text" id="access_key" name="access_key" required><br>
+
+        <label for="secret_key">AWS Secret Access Key:</label>
+        <input type="password" id="secret_key" name="secret_key" required><br>
+
+        <label for="region">Region:</label>
+        <input type="text" id="region" name="region" value="ap-south-1" required><br>
+
+        <label for="instance_type">Instance Type:</label>
+        <input type="text" id="instance_type" name="instance_type" value="t2.micro" required><br>
+
+        <label for="image_id">Image ID:</label>
+        <input type="text" id="image_id" name="image_id" value="ami-0e53db6fd757e38c7" required><br>
+
+        <input type="submit" value="Launch EC2 Instance">
+    </form>
+</body>
+</html>

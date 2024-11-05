@@ -1,0 +1,10 @@
+VLC Player in Docker: Launch a VLC player inside a Docker containe
+
+docker pull faizan2727/faizan_vlc:v1
+
+docker container run -it --env="DISPLAY" --device /dev/snd --net=host faizan2727/faizan_vlc:v1
+
+vlc play audio.mp3
+vlc play video.mp4 
+
+exit

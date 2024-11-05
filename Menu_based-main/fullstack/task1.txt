@@ -1,0 +1,49 @@
+Voice-to-Text using JavaScript: Capture audio via a mic and convert it to text using JavaScript
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Speech to Text</title>
+</head>
+<body>
+  <button id="startButton">Start</button>
+  <button id="stopButton">Stop</button>
+  <div id="output"></div>
+
+  <script>
+    // Check for browser compatibility
+if ('webkitSpeechRecognition' in window) {
+
+const recognition = new webkitSpeechRecognition();
+recognition.continuous = true; // Keep listening until stopped
+recognition.interimResults = true; // Show interim results as they come
+
+recognition.onstart = () => {
+  console.log('Speech recognition started');
+};
+
+recognition.onresult = (event) => {
+  const transcript = event.results[0][0].transcript;
+  document.getElementById('output').textContent = transcript;
+};
+
+recognition.onerror = (event) => {
+  console.error('Speech recognition error:', event.error);
+};
+
+document.getElementById('startButton').addEventListener('click', () => {
+  recognition.start();
+});
+
+document.getElementById('stopButton').addEventListener('click', () => {
+  recognition.stop();
+});
+
+} else {
+console.error('Speech recognition not supported by this browser');
+}
+
+  </script> 
+  
+</body>
+</html>

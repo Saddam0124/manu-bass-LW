@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS EC2 Instance Creator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-top: 10px;
+        }
+        input[type="text"], input[type="password"], input[type="submit"] {
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 100%;
+        }
+        input[type="submit"] {
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Create EC2 Instance</h1>
+        <form action="/create_instance" method="POST">
+            <label for="access_key">AWS Access Key ID:</label>
+            <input type="text" id="access_key" name="access_key" required>
+
+            <label for="secret_key">AWS Secret Access Key:</label>
+            <input type="password" id="secret_key" name="secret_key" required>
+
+            <label for="region">Region:</label>
+            <input type="text" id="region" name="region" value="ap-south-1" required>
+
+            <label for="instance_type">Instance Type:</label>
+            <input type="text" id="instance_type" name="instance_type" value="t2.micro" required>
+
+            <label for="image_id">Image ID:</label>
+            <input type="text" id="image_id" name="image_id" value="ami-0e53db6fd757e38c7" required>
+
+            <input type="submit" value="Create EC2 Instance">
+        </form>
+    </div>
+
+</body>
+</html>
